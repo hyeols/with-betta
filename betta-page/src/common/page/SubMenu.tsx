@@ -34,9 +34,9 @@ const SubMenu = ({ className }: { className: string }) => {
             return (
               <span
                 key={`leftmenu-sub-${menuIdx}`}
-                className={ menu.name === currentSubMenu ? 'active' : '' }
+                className={ menu.sub_type === currentSubMenu ? 'active' : '' }
               >
-                {menu.name}
+                {menu.keyword}
               </span>
             );
           })}

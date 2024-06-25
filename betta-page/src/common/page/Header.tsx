@@ -1,7 +1,7 @@
 import '../css/header.scss';
 import { useNavigate } from 'react-router-dom';
 import { useCommStore } from '../store/useCommStore.ts';
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect } from 'react';
 import { useMenuStore } from '../store/useMenuStore.ts';
 import SubMenuModal from './SubMenuModal.tsx';
 
@@ -14,32 +14,25 @@ const MenuList = ({ className, setModalType }: {className:string, setModalType:(
 
   const menu_list:any = [];
   for(const menu in mainMenu) {
-    menu_list.push({ name: menu, endpoint: mainMenu[menu] })
+    menu_list.push({ type: menu, keyword: mainMenu[menu].keyword, endpoint: mainMenu[menu].endpoint })
   }
   const nav = useNavigate();
-  const movePage = (name: string, endpoint: string) => {
-    setCurrentMainMenu(name);
+  const movePage = (type: string, endpoint: string) => {
+    setCurrentMainMenu(type);
     setCurrentSubMenu('');
     setModalType('');
     nav(endpoint);
   }
-
-  const handleMouseOver = (name: string) => {
-    setModalType(name);
-    
-  }
-
-
   return (
     <div className={className}>
       { menu_list.map((menu, menuIdx: number) => {
           return (
             <span 
               key={`header-menu-${menuIdx}`}
-              onMouseOver={() => setModalType(menu.name)}
-              onClick={() => movePage(menu.name, menu.endpoint)}
+              onMouseOver={() => setModalType(menu.type)}
+              onClick={() => movePage(menu.type, menu.endpoint)}
             >
-              {menu.name}
+              {menu.keyword}
             </span>
           )
         })}
@@ -53,19 +46,22 @@ const Header = () => {
     state.setModalType
   ])
   useEffect(() => {
-    if(modalType === '') {
-      (document.querySelector('.common-body') as HTMLDivElement).style.marginTop = '75px';
-    } else {
-      (document.querySelector('.common-body') as HTMLDivElement).style.marginTop = '150px';
+    const handleModal = (event:MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if(!target.closest('.common-header') || target.classList.contains('modal-dim')) {
+        setModalType('');
+      }
     }
-  }, [modalType])
+    document.body.addEventListener('mouseover', handleModal);
+    return () => { document.body.removeEventListener('mouseover', handleModal) }
+  }, [])
   return (
     <>
+    <span className='main-icon'>로고</span>
     <div id='header' className='common-header'>
-      <span className='common-header_main-icon'></span>
       <MenuList className='common-header_menu' setModalType={setModalType} />
+      <SubMenuModal className='modal'/>
     </div>
-    <SubMenuModal className='modal'/>
     </>
   )
 }

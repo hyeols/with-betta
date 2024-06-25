@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useCommStore } from '../store/useCommStore';
 import { useMenuStore } from '../store/useMenuStore';
 import { useNavigate } from 'react-router-dom';
@@ -9,41 +9,43 @@ const SubMenuModal = ({ className }: { className: string }) => {
     state.modalType,
     state.setModalType
   ]);
-  const [ subMenu, currentMainMenu, currentSubMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state) => [
+  const [ subMenu, currentSubMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state) => [
     state.subMenu,
-    state.currentMainMenu,
     state.currentSubMenu,
     state.setCurrentMainMenu,
     state.setCurrentSubMenu
   ]);
 
   const nav = useNavigate();
-  const moveSubPage = (name: string, endpoint: string) => {
-    setCurrentMainMenu(modalType);
-    setCurrentSubMenu(name);
+  const moveSubPage = (type: string, sub_type:string, endpoint: string) => {
+    setCurrentMainMenu(type);
+    setCurrentSubMenu(sub_type);
     setModalType('');
     nav(endpoint);
   }
-
+  
   if(modalType === '') return null;
   return (
-    <div className={className}>
-      {subMenu[modalType].map((menu, menuIdx: number) => {
-        return (
-          <span
-            className={
-              (currentMainMenu === modalType && currentSubMenu === menu.name)
-              ? 'active'
-              : '' 
-            }
-            key={`modal-submenu-${menuIdx}`}
-            onClick={() => moveSubPage(menu.name, menu.endpoint)}
-          >
-            {menu.name}
-          </span>
-        );
-      })}
-    </div>
+    <>
+      <div className={`${className}-dim`}></div>
+        <div className={className}>
+        {subMenu[modalType].map((menu, menuIdx: number) => {
+            return (
+            <span
+                className={
+                (currentSubMenu === menu.sub_type)
+                ? 'active'
+                : '' 
+                }
+                key={`modal-submenu-${menuIdx}`}
+                onClick={() => moveSubPage(modalType, menu.sub_type, menu.endpoint)}
+            >
+                {menu.keyword}
+            </span>
+            );
+        })}
+        </div>
+    </>
   );
 }
 
