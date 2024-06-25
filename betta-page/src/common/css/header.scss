@@ -1,0 +1,79 @@
+$height_header: 75px;
+$width_leftMenu: 250px;
+
+.common-header {
+  &_main-icon {
+    width: $width_leftMenu;
+    height: 100%;
+  }
+  
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #fff;
+  color: #3870be;
+  height: $height_header;
+  display:flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  text-decoration: none;
+  span {
+    cursor: pointer;
+
+    &:not(:first-child) {
+      margin-left: 15px;
+    }
+  }
+}
+
+.common-body {
+  margin-top: $height_header;
+  height: calc(100vh - #{$height_header});
+  width: calc(100% - #{$width_leftMenu});
+  margin-right: 0;
+  white-space: nowrap;
+  overflow: auto;
+  transition: margin-top 0.3s ease-in-out;
+}
+
+.common-leftmenu {
+  height: calc(100vh - #{$height_header});
+  width: $width_leftMenu;
+  float: left;
+  white-space: nowrap;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  a {
+    display: flex;
+    align-items: center;
+    &::before {
+      content: '';
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+  }
+}
+
+.modal {
+  position: fixed;
+  width:100%;
+  background-color: white;
+  opacity: 0.8;
+  padding-left: $width_leftMenu;
+  top: $height_header;
+
+  &>.active {
+    font-weight: bold;
+  }
+
+  span {
+    cursor: pointer;
+  }
+}
