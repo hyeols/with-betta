@@ -1,16 +1,32 @@
 import '../common/css/menu.scss';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useMenuStore } from '../common/store/useMenuStore.ts';
 
 const ListRoutes = () => {
-  const [ subMenu, currentMainMenu, currentSubMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state) => [
+  const [ mainMenu, subMenu, currentMainMenu, currentSubMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state) => [
+    state.mainMenu,
     state.subMenu,
     state.currentMainMenu,
     state.currentSubMenu,
     state.setCurrentMainMenu,
     state.setCurrentSubMenu
   ])
+
+  useEffect(() => {
+    new Promise((resolve, reject) => {
+      if(currentMainMenu !== '' && mainMenu[currentMainMenu] === undefined) { reject('404 main') }
+      
+      resolve('Menu Validation Completed');
+    }).then(() => {
+      if(currentSubMenu !== '' && subMenu[currentMainMenu].filter((menu => (menu.sub_type === currentSubMenu))).length < 1) {
+        return new Promise((resolve, reject) => reject('404 sub'));
+      }
+    }).catch((error) => {
+      throw error;
+    })
+  }, [currentMainMenu, currentSubMenu]);
+
 
   useEffect(()=> {
     const currentURL = window.location.href;
