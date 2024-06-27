@@ -1,10 +1,11 @@
-import React from 'react';
-import { useCommStore } from '../store/useCommStore';
-import { useMenuStore } from '../store/useMenuStore';
+import React, { useEffect, useRef } from 'react';
+import { useCommStore } from '../store/useCommStore.ts';
+import { useMenuStore } from '../store/useMenuStore.ts';
 import { useNavigate } from 'react-router-dom';
 
 
 const SubMenuModal = ({ className }: { className: string }) => {
+  const [ modalRef, modalDimRef ] = [ useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null) ];
   const [ modalType, setModalType ] = useCommStore((state) => [
     state.modalType,
     state.setModalType

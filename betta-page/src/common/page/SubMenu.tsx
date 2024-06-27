@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useMenuStore } from '../store/useMenuStore';
+import { useMenuStore } from '../store/useMenuStore.ts';
 
 
 const SubMenu = ({ className }: { className: string }) => {
