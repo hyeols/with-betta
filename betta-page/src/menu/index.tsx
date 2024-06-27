@@ -1,7 +1,7 @@
 import '../common/css/menu.scss';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useMenuStore } from '../common/store/useMenuStore';
+import { useMenuStore } from '../common/store/useMenuStore.ts';
 
 const ListRoutes = () => {
   const [ subMenu, currentMainMenu, currentSubMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state) => [
