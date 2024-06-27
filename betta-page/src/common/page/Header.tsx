@@ -6,6 +6,7 @@ import { useMenuStore } from '../store/useMenuStore.ts';
 import SubMenuModal from './SubMenuModal.tsx';
 
 const MenuList = ({ className, setModalType }: { className:string, setModalType:(type: string) => void }) => {
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
   const [ mainMenu, currentMainMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state => [
     state.mainMenu,
     state.currentMainMenu,
@@ -22,8 +23,8 @@ const MenuList = ({ className, setModalType }: { className:string, setModalType:
   const movePage = (type: string, endpoint: string) => {
     setCurrentMainMenu(type);
     setCurrentSubMenu('');
-    setModalType('');
     nav(endpoint);
+    closeBtnRef.current?.click();
   }
 
   const closeDiv = () => {
@@ -46,11 +47,14 @@ const MenuList = ({ className, setModalType }: { className:string, setModalType:
             )
           })}
         <button
-          className='on-off-btn'
+          ref={closeBtnRef}
+          className='no-border-btn'
           dangerouslySetInnerHTML={{ __html: '닫기 < '}}
           onClick={() => closeDiv()}
+          style={{ marginBottom: '10px' }}
         />
       </div>
+      <SubMenuModal className='modal' closeBtnRef={closeBtnRef} />
     </>
   )
 }
@@ -58,25 +62,22 @@ const MenuList = ({ className, setModalType }: { className:string, setModalType:
 const Header = () => {
   const headerMainDivRef = useRef<HTMLDivElement>(null);
   const openBtnRef = useRef<HTMLButtonElement>(null);
+  const [ searchBtnRef, searchTextRef ] = [useRef<HTMLButtonElement>(null), useRef<HTMLInputElement>(null) ];
 
   const [ modalType, setModalType ] = useCommStore(state => [
     state.modalType,
     state.setModalType
   ])
-  useEffect(() => {
-    const handleModal = (event:MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if(!target.closest('.common-header') || target.classList.contains('modal-dim')) {
-        setModalType('');
-      }
-    }
-    document.body.addEventListener('mouseover', handleModal);
-    return () => { document.body.removeEventListener('mouseover', handleModal) }
-  }, []);
+
 
   const openMenu = () => {
-    (document.querySelector('.common-header') as HTMLDivElement).style.width = '';
-    (document.querySelector('.common-header') as HTMLDivElement).style.opacity = '';
+    if(openBtnRef.current?.classList.contains('active')) {
+      (document.querySelector('.common-header') as HTMLDivElement).style.width = '0';
+      (document.querySelector('.common-header') as HTMLDivElement).style.opacity = '0';
+    } else {
+      (document.querySelector('.common-header') as HTMLDivElement).style.width = '';
+      (document.querySelector('.common-header') as HTMLDivElement).style.opacity = '';
+    }
   }
   useEffect(() => {
     if(headerMainDivRef.current) {
@@ -98,25 +99,31 @@ const Header = () => {
     }
   }, [headerMainDivRef]);
 
-  useEffect(() => {
-    
-  }, [modalType])
+  const search = () => {
+    if(searchBtnRef.current?.classList.contains('search-active')) {
+      // do search
+    } else {
+      searchBtnRef.current?.classList.add('search-active');
+      if(searchTextRef.current) searchTextRef.current.style.width = '15rem';
+    }
+  }
+
   return (
     <>
-    <span className='main-icon'>
-    <button 
-      ref={openBtnRef}
-      className='on-off-btn'
-      dangerouslySetInnerHTML={{ __html: '열기 > ' }}
-      style={{ textAlign: 'center', position: 'absolute', left: 0 }}
-      onClick={() => openMenu()}
-    />
-      <span>로고</span>
-    </span>
-    <div id='header' className='common-header' ref={headerMainDivRef} style={{ opacity: 0, width: 0 }}>
-      <MenuList className='common-header_menu' setModalType={setModalType} />
-      <SubMenuModal className='modal'/>
-    </div>
+      <span className='main-icon'>
+        <button 
+          ref={openBtnRef}
+          className='no-border-btn btn-menu'
+          dangerouslySetInnerHTML={{ __html: '열기 > ' }}
+          onClick={() => openMenu()}
+        />
+        <span>로고</span>
+        <input type='text' className='search-object search-box' ref={searchTextRef}/>
+        <button className='no-border-btn search-object' ref={searchBtnRef} onClick={() => search()}>검색</button>
+      </span>
+      <div id='header' className='common-header' ref={headerMainDivRef} style={{ opacity: 0, width: 0 }}>
+        <MenuList className='common-header_menu' setModalType={setModalType} />
+      </div>
     </>
   )
 }

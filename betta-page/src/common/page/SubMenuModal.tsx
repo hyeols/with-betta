@@ -4,7 +4,7 @@ import { useMenuStore } from '../store/useMenuStore.ts';
 import { useNavigate } from 'react-router-dom';
 
 
-const SubMenuModal = ({ className }: { className: string }) => {
+const SubMenuModal = ({ className, closeBtnRef }: { className: string, closeBtnRef:React.RefObject<HTMLButtonElement> }) => {
   const [ modalRef, modalDimRef ] = [ useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null) ];
   const [ modalType, setModalType ] = useCommStore((state) => [
     state.modalType,
@@ -21,8 +21,8 @@ const SubMenuModal = ({ className }: { className: string }) => {
   const moveSubPage = (type: string, sub_type:string, endpoint: string) => {
     setCurrentMainMenu(type);
     setCurrentSubMenu(sub_type);
-    setModalType('');
     nav(endpoint);
+    closeBtnRef.current?.click();
   }
 
   useEffect(() => {
@@ -34,10 +34,8 @@ const SubMenuModal = ({ className }: { className: string }) => {
   if(modalType === '') return null;
   return (
     <>
-      <div className={`${className}-dim`} ref={modalDimRef}>
-          
-      </div>
-        <div className={className} ref={modalRef}>
+      <div className={`${className}-dim`} ref={modalDimRef} onClick={() => {closeBtnRef.current?.click()}}/>
+      <div className={className} ref={modalRef}>
         {subMenu[modalType]?.map((menu, menuIdx: number) => {
             return (
             <span
@@ -54,7 +52,7 @@ const SubMenuModal = ({ className }: { className: string }) => {
             );
         })}
           {/* <button className='modal-close' onClick={() => setModalType('')}>X</button> */}
-        </div>
+      </div>
     </>
   );
 }

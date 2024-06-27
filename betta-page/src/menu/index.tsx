@@ -2,6 +2,7 @@ import '../common/css/menu.scss';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useMenuStore } from '../common/store/useMenuStore.ts';
+import { useCommStore } from '../common/store/useCommStore.ts';
 
 const ListRoutes = () => {
   const [ mainMenu, subMenu, currentMainMenu, currentSubMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state) => [
@@ -12,18 +13,19 @@ const ListRoutes = () => {
     state.setCurrentMainMenu,
     state.setCurrentSubMenu
   ])
-
+  const getMessage = useCommStore(state => state.getMessage);
+  
   useEffect(() => {
     new Promise((resolve, reject) => {
-      if(currentMainMenu !== '' && mainMenu[currentMainMenu] === undefined) { reject('404 main') }
+      if(currentMainMenu !== '' && mainMenu[currentMainMenu] === undefined) { reject(404) }
       
       resolve('Menu Validation Completed');
     }).then(() => {
       if(currentSubMenu !== '' && subMenu[currentMainMenu].filter((menu => (menu.sub_type === currentSubMenu))).length < 1) {
-        return new Promise((resolve, reject) => reject('404 sub'));
+        return new Promise((resolve, reject) => reject(404));
       }
     }).catch((error) => {
-      throw error;
+      throw getMessage(error);
     })
   }, [currentMainMenu, currentSubMenu]);
 

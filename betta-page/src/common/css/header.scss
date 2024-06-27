@@ -33,11 +33,46 @@ body {
   border-bottom: 2px solid #00ECEC;
   z-index: 999;
   background-color: $color-white;
+
+  .btn-menu, .search-object {
+    text-align: center;
+    position: absolute;
+  }
+
+  .btn-menu {
+    left: $body_font-size;
+  }
+
+  $button-width: 40px;
+  .search-object {
+    right: $body_font-size;
+    height: $button-width;
+    width: $button-width;
+    box-sizing: border-box;
+  }
+  .search-box {
+    border-radius: 20px;
+    transition: width 0.5s ease-in-out;
+    padding-left: $body_font-size;
+    padding-right: $button-width;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .common-header {
+    width: auto !important;
+    left: 0;
+    right: 0;
+  }
+
+  .modal {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
 }
 
 .common-header {
   position: absolute;
-  width: $width_leftMenu;
+  
   top: $height_header;
   background-color: $color-white;
   color: #3870be;
@@ -47,8 +82,9 @@ body {
   transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
 
   &_menu {
+    position: fixed;
     height: 100%;
-    width: 100%;
+    width: $width_leftMenu;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -67,7 +103,7 @@ body {
   }
 }
 
-.on-off-btn {
+.no-border-btn {
   cursor: pointer;
   border: none;
   background: none;
@@ -79,14 +115,13 @@ body {
 
 .modal {
   position: fixed;
-  background-color: $color-transparent;
   left: $width_leftMenu;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: minmax(100px, auto);
   z-index: $over-modal;
   margin-left: $size-2;
-  width: 100%;
+  right: 0;
   &>.active {
     font-weight: bold;
   }
