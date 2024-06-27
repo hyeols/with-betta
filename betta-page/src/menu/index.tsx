@@ -1,9 +1,11 @@
+import '../common/css/menu.scss';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useMenuStore } from '../common/store/useMenuStore';
 
 const ListRoutes = () => {
-  const [ currentMainMenu, currentSubMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state) => [
+  const [ subMenu, currentMainMenu, currentSubMenu, setCurrentMainMenu, setCurrentSubMenu ] = useMenuStore((state) => [
+    state.subMenu,
     state.currentMainMenu,
     state.currentSubMenu,
     state.setCurrentMainMenu,
@@ -14,13 +16,24 @@ const ListRoutes = () => {
     const currentURL = window.location.href;
     const objectURL = new URL(currentURL);
     const pathSegments = objectURL.pathname.split('/').filter(segment => segment !== '');
-    
-    setCurrentMainMenu(pathSegments[1]);
-    setCurrentSubMenu(pathSegments[2] ?? '');
+    if(currentMainMenu === '') {
+      setCurrentMainMenu(pathSegments[1]);
+    }
+    if(currentSubMenu === '') {
+      setCurrentSubMenu(pathSegments[2] ?? '');
+    }
   }, []);
   return (
     <>
-      <span>{currentMainMenu}</span>
+      <div className='list-sub-menu'>
+        {
+          subMenu[currentMainMenu]?.map((subMenu, menuIdx:number) => {
+            return (
+              <span key={`submenu-list-${menuIdx}`}>{subMenu.keyword}</span>
+            )
+          })
+        }
+      </div>
       <span>{currentSubMenu}</span>
     </>
   )

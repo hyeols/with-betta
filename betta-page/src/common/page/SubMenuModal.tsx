@@ -24,19 +24,27 @@ const SubMenuModal = ({ className }: { className: string }) => {
     setModalType('');
     nav(endpoint);
   }
+
+  useEffect(() => {
+    if(modalRef.current && modalDimRef.current) {
+      modalDimRef.current.style.top = modalRef.current?.style.height;
+    }
+  }, [modalType, modalRef.current?.style.height])
   
   if(modalType === '') return null;
   return (
     <>
-      <div className={`${className}-dim`}></div>
-        <div className={className}>
-        {subMenu[modalType].map((menu, menuIdx: number) => {
+      <div className={`${className}-dim`} ref={modalDimRef}>
+          
+      </div>
+        <div className={className} ref={modalRef}>
+        {subMenu[modalType]?.map((menu, menuIdx: number) => {
             return (
             <span
                 className={
-                (currentSubMenu === menu.sub_type)
-                ? 'active'
-                : '' 
+                  ((currentSubMenu === menu.sub_type)
+                  ? 'active'
+                  : '') + ((true) ? ' as' : '')
                 }
                 key={`modal-submenu-${menuIdx}`}
                 onClick={() => moveSubPage(modalType, menu.sub_type, menu.endpoint)}
@@ -45,6 +53,7 @@ const SubMenuModal = ({ className }: { className: string }) => {
             </span>
             );
         })}
+          {/* <button className='modal-close' onClick={() => setModalType('')}>X</button> */}
         </div>
     </>
   );

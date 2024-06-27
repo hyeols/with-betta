@@ -7,12 +7,15 @@ $size-4: 4rem;
 $size-5: 5rem;
 $size-6: 6rem;
 
-$height_header: $size-5;
+$height_header: $size-4;
 $height_modal: 40vh;
-$width_leftMenu: 250px;
+$width_leftMenu: 15vw;
 
 $color-white: #fff;
-
+$color-transparent: transparent;
+$img-border-radius: 15px;
+$z-index-modal: 100;
+$over-modal: $z-index-modal + 1;
 
 body {
   font-size: $body_font-size;
@@ -20,71 +23,100 @@ body {
 
 .main-icon {
   width: 100%;
-  height: $size-3;
+  height: $height_header;
   position: fixed;
   top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid beige;
+  border-bottom: 2px solid #00ECEC;
+  z-index: 999;
+  background-color: $color-white;
 }
 
 .common-header {
   position: absolute;
-  width: 100%;
-  top: $size-3;
+  width: $width_leftMenu;
+  top: $height_header;
   background-color: $color-white;
   color: #3870be;
-  height: $height_header;
   display: flex;
-  align-items: center;
-  border-top: 2px solid #00ECEC;
+  flex-direction: column;
+  margin: 10px;
+  transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
 
-  span {
-    cursor: pointer;
+  &_menu {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: $over-modal;
+    span {
+      background-color: $color-white;
+      border: 1px solid black;
+      border-radius: $img-border-radius;
+      height: $size-4;
+      cursor: pointer;
+    }
 
-    &:not(:first-child) {
-      margin-left: $size-1;
+    .active {
+      font-weight: bold;
     }
   }
 }
 
-.modal {
-  position: absolute;
-  width: 100%;
-  height: $height_modal;
-  background-color: $color-white;
+.on-off-btn {
+  cursor: pointer;
+  border: none;
+  background: none;
+  height: 2rem;
+  &.active {
+    border: 1px solid black;
+  }
+}
 
-  top: $height_header;
+.modal {
+  position: fixed;
+  background-color: $color-transparent;
+  left: $width_leftMenu;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20vw, 3fr));
-  grid-template-rows: repeat(auto-fill, minmax(15vh, 3fr));
-  z-index: 101;
-  border-top: 2px solid #00ECEC;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(100px, auto);
+  z-index: $over-modal;
+  margin-left: $size-2;
+  width: 100%;
   &>.active {
     font-weight: bold;
   }
 
   span {
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: $img-border-radius;
     border: 1px solid black;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 10px;
+    background-color: $color-white;
   }
-
+  &-close {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 20px;
+  }
   &-dim {
     position: fixed;
-    top: calc(#{$height_header} + #{$height_modal});
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 100;
+    z-index: $z-index-modal;
     background-color: gray;
-    opacity: 0.5;
+    opacity: 0.3;
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Header, SubMenu } from './page/index.ts';
+import { BrowserRouter } from 'react-router-dom';
+import { Header } from './page/index.ts';
 
 const Common = () => {
   return (
