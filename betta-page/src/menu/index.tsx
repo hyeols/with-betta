@@ -1,6 +1,5 @@
 import '../common/css/menu.scss';
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { useMenuStore } from '../common/store/useMenuStore.ts';
 import { useCommStore } from '../common/store/useCommStore.ts';
 
