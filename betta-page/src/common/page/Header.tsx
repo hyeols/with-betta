@@ -104,7 +104,11 @@ const Header = () => {
       // do search
     } else {
       searchBtnRef.current?.classList.add('search-active');
-      if(searchTextRef.current) searchTextRef.current.style.width = '15rem';
+      if(searchTextRef.current) {
+        searchTextRef.current.style.width = '15rem';
+        searchTextRef.current.style.paddingRight = '40px';
+      }
+        
     }
   }
 
