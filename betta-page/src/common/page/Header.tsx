@@ -121,7 +121,7 @@ const Header = () => {
           dangerouslySetInnerHTML={{ __html: '열기 > ' }}
           onClick={() => openMenu()}
         />
-        <span>로고</span>
+        <span>로고.</span>
         <input type='text' className='search-object search-box' ref={searchTextRef}/>
         <button className='no-border-btn search-object' ref={searchBtnRef} onClick={() => search()}>검색</button>
       </span>
