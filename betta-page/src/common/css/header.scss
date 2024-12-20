@@ -34,6 +34,16 @@ body {
   z-index: 999;
   background-color: $color-white;
 
+  .logo {
+    width: 100px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: url('../icon/logo.png') no-repeat;
+    background-size: contain;
+  }
   .btn-menu, .search-object {
     text-align: center;
     position: absolute;
